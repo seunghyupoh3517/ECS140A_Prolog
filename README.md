@@ -1,2 +1,0 @@
-# ECS140A_Prolog
-UCD Winter 2021 ECS140A
