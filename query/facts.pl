@@ -40,6 +40,9 @@ novel(mistborn_trilogy, 2006).
 novel(something_wicked_this_way_comes, 1962).
 novel(the_illustrated_man, 1951).
 novel(little_women, 1868).
+/* Added test cases */
+novel(book1800, 1800).
+novel(book1900, 1900).
 
 fan(amy, [the_lord_of_the_rings, the_way_of_kings]).
 fan(barry, [cats_cradle, the_war_of_the_worlds]).
@@ -61,6 +64,10 @@ fan(tag, [a_song_of_ice_and_fire_series, the_way_of_kings]).
 fan(ursula, [american_gods, the_sandman_series, neverwhere, stardust, the_lord_of_the_rings]).
 fan(will, [the1984, frankenstein, the_20000_leagues_under_the_sea]).
 fan(zelner, [the_lord_of_the_rings, american_gods, the_sandman_series]).
+/* Added test cases */
+fan(book2, [american_gods, the_lord_of_the_rings, the_sandman_series]).
+fan(book3, [american_gods, the_sandman_series, the_lord_of_the_rings]).
+fan(noBook, []).
 
 author(jrr_Tolkien, [the_lord_of_the_rings, the_silmarillion]).
 author(douglas_adams, [the_hitchhikers_guide_to_the_galaxy]).
