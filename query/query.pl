@@ -1,6 +1,6 @@
-/* All novels published either during the year 1953 or during the year 1996*/
-:- include("facts.pl").
+:- consult(facts).
 
+/* All novels published either during the year 1953 or during the year 1996*/
 year_1953_1996_novels(Book) :-
     novel(Book, 1953);
     novel(Book, 1996).
@@ -41,14 +41,9 @@ mutual_novels(Book) :-
     fan(ross, Ross_books),
     fan(monica, Monica_books),
 
-    (between_fans(Book, Phoebe_books, Ross_books);
-    between_fans(Book, Phoebe_books, Monica_books);
+    (between_fans(Book, Phoebe_books, Ross_books),!;
+    between_fans(Book, Phoebe_books, Monica_books),!;
     between_fans(Book, Ross_books, Monica_books)).
-
-    % between_phoebe_ross(Book, Phoebe_books, Ross_books);
-    % between_phoebe_ross(Book, Phoebe_books, Monica_books);
-    % between_phoebe_ross(Book, Ross_books, Monica_books).
-
 
 between_fans(Book, FanBooks1, FanBooks2) :-
     find_book(Book, FanBooks1),
