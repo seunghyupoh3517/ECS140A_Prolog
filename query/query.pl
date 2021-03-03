@@ -16,8 +16,9 @@ lotr_fans(Fan) :-
     fan(Fan, Books),
     find_book(the_lord_of_the_rings, Books).
 
+/* Find if X contained in Books */
 find_book(X, [X | _]).
-find_book(X, [_ | Books]) :- find_book(X, Books),!.
+find_book(X, [_ | Books]) :- find_book(X, Books).
 
 /* Authors of the novels that heckles is fan of. */
 heckles_idols(Author) :-
@@ -25,7 +26,7 @@ heckles_idols(Author) :-
     fan(heckles, Fan_books),
     common_books(Author_books, Fan_books).
 
-common_books([X |_], Books) :- find_book(X, Books),!.
+common_books([X |_], Books) :- find_book(X, Books).
 common_books([_| Y], Books) :- common_books(Y, Books).
 
 
@@ -41,8 +42,8 @@ mutual_novels(Book) :-
     fan(ross, Ross_books),
     fan(monica, Monica_books),
 
-    (between_fans(Book, Phoebe_books, Ross_books),!;
-    between_fans(Book, Phoebe_books, Monica_books),!;
+    (between_fans(Book, Phoebe_books, Ross_books);
+    between_fans(Book, Phoebe_books, Monica_books);
     between_fans(Book, Ross_books, Monica_books)).
 
 between_fans(Book, FanBooks1, FanBooks2) :-
