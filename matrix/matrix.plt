@@ -21,15 +21,11 @@ test(are_adjacent11, [nondet]) :- are_adjacent([1, 2, 3], 1, 2).
 test(are_adjacent12, [fail])   :- are_adjacent([1, 2, 1], 1, 4).
 test(are_adjacent13, [nondet]) :- are_adjacent([1, 2, 1, 4], 1, 4).
 
-test(transpose01, [nondet]) :- transpose([], []).
-test(transpose02, [nondet]) :- transpose([[1, 2, 3, 4]], [[1], [2], [3], [4]]).
-test(transpose03, [nondet]) :- transpose([[1], [2], [3], [4]], [[1, 2, 3, 4]]).
-test(transpose04, [nondet]) :- transpose([[1, 2], [3, 4]], [[1, 3], [2, 4]]).
-test(transpose05, [nondet]) :- transpose([[1, 3], [2, 4]], [[1, 2], [3, 4]]).
-test(transpose05, [fail]) :- transpose([[1, 3], [2, 4]], [[1, 3], [2, 4]]).
-test(transpose05, [nondet]) :- transpose([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 
-    [[1, 4, 7], [2, 5, 8], [3, 6, 9]]).
-test(transpose05, [fail]) :- transpose([[1, 2, 3], [4, 5, 6], [7, 8, 9]], []).
+test(matrix_transpose01, [nondet]) :- matrix_transpose([], X), X == [].
+test(matrix_transpose02, [nondet]) :- matrix_transpose([[1, 2, 3, 4]], X), X == [[1], [2], [3], [4]].
+test(matrix_transpose03, [nondet]) :- matrix_transpose([[1], [2], [3], [4]], X), X == [[1, 2, 3, 4]].
+test(matrix_transpose04, [nondet]) :- matrix_transpose([[1, 2], [3, 4]], X), X == [[1, 3], [2, 4]].
+test(matrix_transpose05, [nondet]) :- matrix_transpose([[1, 3], [2, 4]], X), X == [[1, 2], [3, 4]].
 
 test(are_neighbors01, [fail])   :- are_neighbors([], 1, 2).
 test(are_neighbors02, [nondet]) :- are_neighbors([[1, 2, 3]], 1, 2).
@@ -38,11 +34,5 @@ test(are_neighbors04, [nondet]) :- are_neighbors([[1], [2], [3]], 1, 2).
 test(are_neighbors05, [nondet]) :- are_neighbors([[1, 2, 3], [4, 5, 6]], 1, 2).
 test(are_neighbors06, [fail])   :- are_neighbors([[1, 2, 3], [4, 5, 6]], 2, 6).
 test(are_neighbors07, [fail])   :- are_neighbors([[1, 2, 3], [4, 5, 6]], 1, 6).
-test(are_neighbors07, [nondet])   :- are_neighbors([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 6, 10).
-test(are_neighbors07, [nondet])   :- are_neighbors([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 12, 16).
-test(are_neighbors07, [fail])   :- are_neighbors([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 7, 10).
-test(are_neighbors07, [fail])   :- are_neighbors([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 1, 16).
-
-
 
 :- end_tests(mat).

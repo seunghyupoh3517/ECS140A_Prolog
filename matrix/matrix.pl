@@ -12,10 +12,9 @@ are_adjacent([_ | X], A, B) :- are_adjacent(X, A, B).
 match(X, [X | _]).
 matchNext(X, [_ | Y]) :- match(X, Y).
 
-
-% transpose(Matrix, Answer) returns true iff Answer is the transpose of the 2D
-% matrix Matrix
-transpose(Matrix, Answer) :-
+% matrix_transpose(Matrix, Answer) returns true iff Answer is the transpose of
+% the 2D matrix Matrix.
+matrix_transpose(Matrix, Answer) :-
     make_transpose(Matrix, Tmatrix),
     Answer = Tmatrix.
 
@@ -33,7 +32,6 @@ make_transpose([_|Rs], Ms, [Ts|Tss]) :-
 lists_firsts_rests([], [], []).
 lists_firsts_rests([[F|Os]|Rest], [F|Fs], [Os|Oss]) :-
         lists_firsts_rests(Rest, Fs, Oss).
-
 
 % are_neighbors(Matrix, A, B) returns true iff A and B are neighbors in the 2D
 % matrix Matrix.
