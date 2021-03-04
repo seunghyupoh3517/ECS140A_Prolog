@@ -14,17 +14,10 @@ type DisjointSet interface {
 	FindSet(int) int
 }
 
-
-
 type Collection struct{
 	parent map[int]int 		// map from node -> parent
 	rank map[int]int 		// map from node -> rank
 }
-
-
-
-
-// TODO: implement a type that satisfies the DisjointSet interface.
 
 // NewDisjointSet creates a struct of a type that satisfies the DisjointSet interface.
 func NewDisjointSet() DisjointSet {
@@ -46,8 +39,6 @@ func (sets Collection) FindSet(num int) int {
 	// reach the root and return it
 	return num
 }
-
-
 
 func (sets Collection) UnionSet(x, y int) int {
 	// find root of two numbers
