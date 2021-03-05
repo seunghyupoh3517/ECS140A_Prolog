@@ -190,14 +190,16 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 		unif.size[s] += unif.size[t]
 		unif.vars[s] = append(unif.vars[s], unif.vars[t]...)	// append the vars(t) to vars(s)
 		// re assign the representitive of s to t's
+		// fmt.Println("The unif.vars[t] in line 193", unif.vars[t])
 		if unif.schema[s].Typ == term.TermVariable {
 			unif.schema[s] = unif.schema[t]
 		}
-		unif.disjointsets[s].UnionSet(mapToInt[s], mapToInt[t])
+		// fmt.Println(unif.disjointsets[s].UnionSet(mapToInt[s], mapToInt[t]))
 	} else {
 		// insert s's disjoint set to t's
 		unif.size[t] += unif.size[s]
 		unif.vars[t] = append(unif.vars[t], unif.vars[s]...)
+		fmt.Println("The unif.vars[t] in line 201", unif.vars[t])
 		// re assign the representitive of t's to s's
 		if unif.schema[t].Typ == term.TermVariable {
 			unif.schema[t] = unif.schema[s]
@@ -206,37 +208,54 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 	}
 }
 
+
+// 这个asyclic很迷,我感觉一开始并不能等于true(默认是true好像),因为这样的话大部分Unify都会报错
+// if s.Typ == term.TermCompound 在这个function里面calling FindSolution出了问题
+// 只要最后一项不是多项compound term就可以pass， 比如最后是f(1),f(x)就pass不了
+// 按理来说最后的compoundterm应该是empty set， 但是咱们的program判定如果是compound term就会还有后续，继续往里找就出错了
+// 单项中比如{"f(X)", "f(B)"}不会进行recursive，所以就不会出错
+// 出错在num := unif.disjointsets[t].FindSet(mapToInt[t])这一行
+
+
 func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	// fmt.Println(" *** Debug info: ", t, "line 210")
 	// fmt.Println(" *** Debug info: unif.disjointSet =", unif.disjointsets[t], "line 195")	
 	// fmt.Println(" *** Debug info: map =", unif.disjointsets)
+	fmt.Println("Beginning of the FindSol	")
+	if mapToInt[t] == 0{
+		return nil
+	}
 	num := unif.disjointsets[t].FindSet(mapToInt[t])
-
 	s := mapToTerm[num]
 	s = unif.schema[s]
-	// fmt.Println(" *** Debug info: ", s, "line 217")
+	
+	// acyclic[s] = false
+	fmt.Println(" *** Debug info: ", s, "line 219")
 	// fmt.Println(" *** Debug info: schema[] =", unif.schema, "line 218")
 	if val, ok := acyclic[s]; ok {
 		// TODO: Double check what need to return here??
-		// fmt.Println(" *** Debug info: from line 202")
-		if val == true {
+		fmt.Println(" *** Debug info: from line 221 val == ", val)
+		if val == false{
+			// fmt.Println(" *** Debug info: from line 225")
 			return ErrUnifier
 		}
+		
 	}
-
-	if val, ok := visited[s]; ok {
+	fmt.Println(" *** Debug info line 236")
+	 if val, ok := visited[s]; ok {
 		if val == true {
-			// fmt.Println(" *** Debug info: from line 210")
+			// fmt.Println(" *** Debug info: from line 229")
 			return ErrUnifier		// exits a cycle
 		}
 	}
-
+	fmt.Println(" *** Debug info line 243, s=", s)
 	if s.Typ == term.TermCompound {
 		// fmt.Println(" *** Debug info: from line 216")
 		visited[s] = true
 		for i := range s.Args {
-			// fmt.Println(" *** Debug info: i=", s.Args[i], "from line 219")
+			fmt.Println(" *** Debug info: i=", s.Args[i], "from line 248")
 			err := unif.FindSolution(s.Args[i])
+			// fmt.Println("11111111111111")
 			if err != nil {
 				// fmt.Println(" *** Debug info: from line 222")
 				return ErrUnifier
@@ -247,20 +266,25 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 
 	acyclic[s] = true
 
-
+	// fmt.Println(" *** Debug info line 260")
 	num2 := unif.disjointsets[t].FindSet(mapToInt[s])
 	s = mapToTerm[num2]
+	// fmt.Println(" *** Debug info line 263")
 	// fmt.Println(" *** Debug info: from line 253")
-	fmt.Println(" *** Debug info: s =",s ,"- from line 254")
+	// fmt.Println(" *** Debug info: s =",s ,"- from line 254")
 	varsList := unif.vars[s]
-	fmt.Println(" *** Debug info: varslist =",varsList ,"- from line 256")
+	fmt.Println(" *** Debug info: varslist =",varsList ,"- from line 268")
+
 	if len(varsList) > 0 {
 		for _, x := range varsList {
+			// fmt.Println("x= ", x,"s= ",s)
 			if x != s {
-				fmt.Println(" *** Debug info: from line 259")
+				// fmt.Println(" *** Debug info: from line 259")
 				unifyMap[x] = s
+				// fmt.Println("The UnifyMap is ", unifyMap[x])
 			}
 		}
 	}
+
 	return nil
 }
