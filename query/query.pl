@@ -1,5 +1,3 @@
-:- consult(facts).
-
 /* All novels published either during the year 1953 or during the year 1996*/
 year_1953_1996_novels(Book) :-
     novel(Book, 1953);
