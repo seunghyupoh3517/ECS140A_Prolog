@@ -2,6 +2,7 @@ package term
 
 import (
 	"errors"
+	// "fmt"
  // "strconv"
 )
 
@@ -60,6 +61,9 @@ const (
 
 var mixedArray = [][][]interface{} {{nil, nil, nil, nil, {Term_NT, tokenEOF}, {Term_NT, tokenEOF}, {Term_NT, tokenEOF}}, {nil, nil , nil, nil, {tokenAtom, NT1}, {tokenNumber}, {tokenVariable}}, {{}, {tokenLpar, Args_NT, tokenRpar}, {}, {},  nil, nil, nil},  {nil, nil, nil, nil, {Term_NT, NT2}, {Term_NT, NT2}, {Term_NT, NT2}}, {nil, nil, {}, {tokenComma, Args_NT}, nil, nil, nil}}
 
+// NOTICE: I moved the termMap from Parse func which is local to the global.
+var termMap = map[string]*Term{}  	// term.toString() -> *term
+
 // implements the Parse method with Grammar struct
 func (g Grammar) Parse(str string) (*Term, error) {
 	// The parseTable can be the type of
@@ -69,7 +73,9 @@ func (g Grammar) Parse(str string) (*Term, error) {
 	var stk1 = []*Term{} 					// functor
 	var stk2 = [][]*Term{}   				// argument List
 	var stk_ptr = 0
-	var termMap = map[string]*Term{}  	// term.toString() -> *term
+
+	// NOTICE: I moved the termMap from Parse func which is local to the global.
+	// var termMap = map[string]*Term{}  	// term.toString() -> *term
 
 	// Tokennize the input string
 	lex := newLexer(str)
@@ -169,6 +175,7 @@ func (g Grammar) Parse(str string) (*Term, error) {
 					} else if (topOfStack == tokenEOF) {
 							// only a single term left, return it
 						 	if len(termMap) > 0 {
+								// fmt.Println(" @@@ Debug info: check termMap:", termMap)
 							 	return finalTerm, nil
 							}
 					}
