@@ -109,7 +109,7 @@ func (unif GeneralUnifier) Unify(t1 *term.Term, t2 *term.Term) (UnifyResult, err
 	if err_findSol != nil {
 		return nil, ErrUnifier
 	}
-	fmt.Println(" *** Debug info:  from line 112")
+	// fmt.Println(" *** Debug info:  from line 112")
 	return unifyMap, nil
 }
 
@@ -216,12 +216,16 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 // 单项中比如{"f(X)", "f(B)"}不会进行recursive，所以就不会出错
 // 出错在num := unif.disjointsets[t].FindSet(mapToInt[t])这一行
 
+// I let the line 241 val == false, original is val == true
+// if keep the ErrorSymbolClash open, the "TestUnifySuccess" will fail somehow????? Global ?
+
 
 func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	// fmt.Println(" *** Debug info: ", t, "line 210")
 	// fmt.Println(" *** Debug info: unif.disjointSet =", unif.disjointsets[t], "line 195")	
 	// fmt.Println(" *** Debug info: map =", unif.disjointsets)
-	fmt.Println("Beginning of the FindSol	")
+	// fmt.Println("Beginning of the FindSol	")
+	// fmt.Println(mapToInt[t])
 	if mapToInt[t] == 0{
 		return nil
 	}
@@ -230,30 +234,30 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	s = unif.schema[s]
 	
 	// acyclic[s] = false
-	fmt.Println(" *** Debug info: ", s, "line 219")
+	// fmt.Println(" *** Debug info: ", s, "line 219")
 	// fmt.Println(" *** Debug info: schema[] =", unif.schema, "line 218")
 	if val, ok := acyclic[s]; ok {
 		// TODO: Double check what need to return here??
-		fmt.Println(" *** Debug info: from line 221 val == ", val)
+		// fmt.Println(" *** Debug info: from line 221 val == ", val)
 		if val == false{
 			// fmt.Println(" *** Debug info: from line 225")
 			return ErrUnifier
 		}
 		
 	}
-	fmt.Println(" *** Debug info line 236")
+	// fmt.Println(" *** Debug info line 236")
 	 if val, ok := visited[s]; ok {
 		if val == true {
 			// fmt.Println(" *** Debug info: from line 229")
 			return ErrUnifier		// exits a cycle
 		}
 	}
-	fmt.Println(" *** Debug info line 243, s=", s)
+	// fmt.Println(" *** Debug info line 243, s=", s)
 	if s.Typ == term.TermCompound {
 		// fmt.Println(" *** Debug info: from line 216")
 		visited[s] = true
 		for i := range s.Args {
-			fmt.Println(" *** Debug info: i=", s.Args[i], "from line 248")
+			// fmt.Println(" *** Debug info: i=", s.Args[i], "from line 248")
 			err := unif.FindSolution(s.Args[i])
 			// fmt.Println("11111111111111")
 			if err != nil {
@@ -273,7 +277,7 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	// fmt.Println(" *** Debug info: from line 253")
 	// fmt.Println(" *** Debug info: s =",s ,"- from line 254")
 	varsList := unif.vars[s]
-	fmt.Println(" *** Debug info: varslist =",varsList ,"- from line 268")
+	// fmt.Println(" *** Debug info: varslist =",varsList ,"- from line 268")
 
 	if len(varsList) > 0 {
 		for _, x := range varsList {

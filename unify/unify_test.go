@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// // Unification failure due to symbol clash
+// Unification failure due to symbol clash
 // func TestUnifyErrorSymbolClash(t *testing.T) {
 // 	testCases := []struct {
 // 		input1, input2 string
@@ -107,33 +107,33 @@ func TestUnifySuccess(t *testing.T) {
 	for idx, test := range []struct {
 		input1, input2 string
 	}{
-		// {"f(X, X)", "f(A, B)"},
+		{"f(X, X)", "f(A, B)"},
 		{"f(X, Y)", "f(g(Y), 2)"},
-		// {"f(A, B, C)", "f(X, X, X)"},
-		// {"f(h(Y), Y)", "f(X, g(1))"},
-		// {"f(X, g(a))", "f(g(Y), g(Y))"},
-		// {"f(X, Y)", "f(f(Y), f(Z))"},
-		// {"f(X, Y, Z)", "f(2, f(Z), f(X))"},
-		// {
-		// 	"f(A, B, C, D, E, F, 1)",
-		// 	"f(X, X, X, X, X, X, X)",
-		// },
-		// {
-		// 	"f(A, B, C, D, E, F, 1)",
-		// 	"f(X, X, X, X, X, X, C)",
-		// },
-		// {
-		// 	"f(A, B, C, D, E, F, 1)",
-		// 	"f(X, A, B, C, D, E, F)",
-		// },
-		// {
-		// 	"f(A, B, f(C), f(g(D, E)), f(g(h(F), 2)), g(1))",
-		// 	"f(X, A, f(B), f(g(C, D)), f(g(h(E), 2)), g(F))",
-		// },
-		// {
-		// 	"f(A, B, C, D, E, 2)",
-		// 	"f(C, A, 1, F, D, E)",
-		// },
+		{"f(A, B, C)", "f(X, X, X)"},
+		{"f(h(Y), Y)", "f(X, g(1))"},
+		{"f(X, g(a))", "f(g(Y), g(Y))"},
+		{"f(X, Y)", "f(f(Y), f(Z))"},
+		{"f(X, Y, Z)", "f(2, f(Z), f(X))"},
+		{
+			"f(A, B, C, D, E, F, 1)",
+			"f(X, X, X, X, X, X, X)",
+		},
+		{
+			"f(A, B, C, D, E, F, 1)",
+			"f(X, X, X, X, X, X, C)",
+		},
+		{
+			"f(A, B, C, D, E, F, 1)",
+			"f(X, A, B, C, D, E, F)",
+		},
+		{
+			"f(A, B, f(C), f(g(D, E)), f(g(h(F), 2)), g(1))",
+			"f(X, A, f(B), f(g(C, D)), f(g(h(E), 2)), g(F))",
+		},
+		{
+			"f(A, B, C, D, E, 2)",
+			"f(C, A, 1, F, D, E)",
+		},
 	} {
 		unifier := NewUnifier()
 		parser := term.NewParser()
