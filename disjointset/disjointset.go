@@ -3,15 +3,18 @@ package disjointset
 // DisjointSet is the interface for the disjoint-set (or union-find) data
 // structure.
 // Do not change the definition of this interface.
-// import (
-// 	"fmt"
-// )
+import (
+	"fmt"
+)
 type DisjointSet interface {
 	// UnionSet(s, t) merges (unions) the sets containing s and t,
 	// and returns the representative of the resulting merged set.
 	UnionSet(int, int) int
 	// FindSet(s) returns representative of the class that s belongs to.
 	FindSet(int) int
+
+	// TODO: need to delete
+	ToString() string
 }
 
 type Collection struct{
@@ -61,9 +64,14 @@ func (sets Collection) UnionSet(x, y int) int {
 		sets.parent[rootA] = rootB
 		return rootB
 	} else {
-		sets.parent[rootA] = rootB
-		sets.rank[rootB] = rankB + 1
-		return rootB
+		sets.parent[rootB] = rootA
+		sets.rank[rootA] = rankA + 1
+		return rootA
 	}
 
+}
+
+// TODO: Need to delete, only for debug mode
+func (sets Collection) ToString() string {
+	return fmt.Sprint(" ", sets.parent)
 }
