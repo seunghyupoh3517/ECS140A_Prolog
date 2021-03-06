@@ -59,29 +59,29 @@ func TestUnifyErrorExistsACycle(t *testing.T) {
 	testCases := []struct {
 		input1, input2 string
 	}{
-		// {"X", "f(X)"},		// pass
-		// {"f(X, f(Y))", "f(Y, X)"},			// not pass
-		// {"a(b(c, 2, X), 0, Z)", "X"},		// NOT Pass
-		// {
-		// 	"f(A, B, C, D, E, F)",
-		// 	"f(f(B), C, D, E, F, A)",
-		// },
-		// {
-		// 	"f(f(A), f(B), f(C), f(D), f(E), f(F))",
-		// 	"f(B, C, D, E, F, A)",
-		// },
-		// {
-		// 	"f(f(F), D, f(D), f(A), F, f(B))",
-		// 	"f(f(E), f(C), E, B, A, C)",
-		// },
-		// {
-		// 	"f(f(A), f(f(B)), f(f(C)), f(f(f(D))), f(f(f(f(E)))), f(f(f(f(f(F))))))",
-		// 	"f(B, C, D, E, F, A)",
-		// },
-		// {
-		// 	"f(g(A), h(B, C), f(g(D, 1)), h(A, g(E)))",
-		// 	"f(E, h(D, A), f(g(C, 1)), h(A, g(B)))",
-		// },
+		{"X", "f(X)"},		// pass
+		{"f(X, f(Y))", "f(Y, X)"},			// not pass
+		{"a(b(c, 2, X), 0, Z)", "X"},		// NOT Pass
+		{
+			"f(A, B, C, D, E, F)",
+			"f(f(B), C, D, E, F, A)",
+		},
+		{
+			"f(f(A), f(B), f(C), f(D), f(E), f(F))",
+			"f(B, C, D, E, F, A)",
+		},
+		{
+			"f(f(F), D, f(D), f(A), F, f(B))",
+			"f(f(E), f(C), E, B, A, C)",
+		},
+		{
+			"f(f(A), f(f(B)), f(f(C)), f(f(f(D))), f(f(f(f(E)))), f(f(f(f(f(F))))))",
+			"f(B, C, D, E, F, A)",
+		},
+		{
+			"f(g(A), h(B, C), f(g(D, 1)), h(A, g(E)))",
+			"f(E, h(D, A), f(g(C, 1)), h(A, g(B)))",
+		},
 	}
 	for idx, test := range testCases {
 		unifier := NewUnifier()

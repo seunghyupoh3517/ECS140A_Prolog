@@ -254,14 +254,13 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 		// TODO: Double check what need to return here??
 		fmt.Println(" *** Debug info: from line 271")
 		if val == true {
-			// return ErrUnifier
+			return ErrUnifier
 		}
 	}
 
 	if val, ok := visited[s]; ok {
 		if val == true {
-			// fmt.Println(" *** Debug info: from line 210")
-			return ErrUnifier		// exits a cycle
+			acyclic[s] = false			// exits a cycle
 		}
 	}
 
