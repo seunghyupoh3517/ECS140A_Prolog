@@ -67,6 +67,7 @@ func NewUnifier() Unifier {
 										   make(map[*term.Term]int),
 										   make(map[*term.Term]*term.Term), 
 									 	   make(map[*term.Term][]*term.Term) }
+	unifyMap = UnifyResult{} //maybe create another map to append on this map
 	return unifyObj 
 }
 
@@ -87,6 +88,7 @@ func (unif GeneralUnifier) Initializer(t1 *term.Term, t2 *term.Term) {
 		// initialize the vars for the term
 		if t1.Typ == term.TermVariable {
 			unif.vars[t1] = append(unif.vars[t1], t1)
+			fmt.Println(unif.vars[t1])
 		}
 	}
 
@@ -108,6 +110,7 @@ func (unif GeneralUnifier) Initializer(t1 *term.Term, t2 *term.Term) {
 
 		if t2 != nil && t2.Typ == term.TermVariable {
 			unif.vars[t2] = append(unif.vars[t2], t2)
+			fmt.Println(unif.vars[t2])
 		}
 	}
 }
@@ -128,8 +131,9 @@ func (unif GeneralUnifier) Unify(t1 *term.Term, t2 *term.Term) (UnifyResult, err
 		resetGlobal()
 		return nil, ErrUnifier
 	}
-	fmt.Println(" *** Debug info:  from line 112")
+	// fmt.Println(" *** Debug info:  from line 112")
 	resetGlobal()
+	fmt.Println("***************END****************")
 	return unifyMap, nil
 }
 
@@ -144,8 +148,8 @@ func (unif GeneralUnifier) UnifClousure(t1 *term.Term, t2 *term.Term) error {
 		schema_t := unif.schema[t]
 		if schema_s.Typ == term.TermVariable || schema_t.Typ == term.TermVariable {
 			// one of their schema is variable 
-			fmt.Println(" *** Debug info: s = ",s , ", t =", t ,"- line 127")
-			fmt.Println(" *** Debug info: schema_s = ",schema_s , ", schema_t =",schema_t ,"- line 128")
+			// fmt.Println(" *** Debug info: s = ",s , ", t =", t ,"- line 127")
+			// fmt.Println(" *** Debug info: schema_s = ",schema_s , ", schema_t =",schema_t ,"- line 128")
 			unif.Union(s, t)
 		} else {
 			// fmt.Println(" *** Debug info: from line 123")
@@ -211,9 +215,9 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 	if unif.size[s] >= unif.size[t] {
 		unif.size[s] += unif.size[t]
 		unif.vars[s] = append(unif.vars[s], unif.vars[t]...)	// append the vars(t) to vars(s)
-		fmt.Println(" *** Debug info: check s=",s ," - line 193")
-		fmt.Println(" *** Debug info: check vars(s)=",unif.vars[s] ," - line 194")
-		fmt.Println(" ***************************************************")
+		// fmt.Println(" *** Debug info: check s=",s ," - line 193")
+		// fmt.Println(" *** Debug info: check vars(s)=",unif.vars[s] ," - line 194")
+		// fmt.Println(" ***************************************************")
 		
 		// re assign the representitive of s to t's
 		if unif.schema[s].Typ == term.TermVariable {
@@ -239,16 +243,19 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	num := unif.disjointsets[t].FindSet(mapToInt[t])
 
 	s := mapToTerm[num]
-	// fmt.Println(" *** Debug info: ", s, "line 222")
+	fmt.Println(" *** Debug info: ", s, "line 222")
 	s = unif.schema[s]
 	// fmt.Println(" *** Debug info: ", s, "line 224")
 
-
-	// fmt.Println(" *** Debug info: ", s, "line 217")
+	//semms like it jump one letter(ignore one letter and move forward, don't know why)
+	// fmt.Println(" *** Debug info: ", s, "line 248")
 	// fmt.Println(" *** Debug info: schema[] =", unif.schema, "line 218")
+	// fmt.Println(" *** ayclic[s] == ", acyclic[s])
+
 	if val, ok := acyclic[s]; ok {
 		// TODO: Double check what need to return here??
-		fmt.Println(" *** Debug info: from line 233")
+		// fmt.Println("val == ", val)
+		// fmt.Println(" *** Debug info: from line 233")
 		if val == true {
 			// return ErrUnifier
 		}
@@ -269,8 +276,9 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 			// fmt.Println("********************************")
 			unif.Initializer(s.Args[i], nil)
 			err := unif.FindSolution(s.Args[i])
+			// fmt.Println(" *** The value of s is == ", s)
 			if err != nil {
-				// fmt.Println(" *** Debug info: from line 252")
+				fmt.Println(" *** Debug info: from line 278")
 				return ErrUnifier
 			}		
 		}
@@ -278,21 +286,25 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	}
 
 	acyclic[s] = true
-
+	fmt.Println(" *** Debug info: ", s, "line 288")
 
 	num2 := unif.disjointsets[t].FindSet(mapToInt[s])
-	s = mapToTerm[num2]
+	//original is num2 and I changed to num2 -1, the index is wrong
+	b := mapToTerm[num2 - 1] //set a new value
 	// fmt.Println(" *** Debug info: from line 253")
-	// fmt.Println(" *** Debug info: s =",s ,"- from line 254")
-	varsList := unif.vars[s]
+	fmt.Println(" *** Debug info: s =",unif.vars[b] ,"- from line 292")
+	varsList := unif.vars[b]
 	// fmt.Println(" *** Debug info: varslist =",varsList ,"- from line 256")
 	if len(varsList) > 0 {
 		for _, x := range varsList {
+			fmt.Println(" *** Debug info: x =",x ,"- from line 296")
 			if x != s {
-				// fmt.Println(" *** Debug info: from line 259")
+
 				unifyMap[x] = s
+				fmt.Println("The map will be : ",unifyMap)
 			}
 		}
 	}
+	
 	return nil
 }
