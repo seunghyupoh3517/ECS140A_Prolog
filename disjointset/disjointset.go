@@ -68,7 +68,6 @@ func (sets Collection) UnionSet(x, y int) int {
 		sets.rank[rootA] = rankA + 1
 		return rootA
 	}
-
 }
 
 // TODO: Need to delete, only for debug mode

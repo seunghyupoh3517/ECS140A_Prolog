@@ -129,7 +129,7 @@ func (unif GeneralUnifier) Unify(t1 *term.Term, t2 *term.Term) (UnifyResult, err
 		resetGlobal()
 		return nil, ErrUnifier
 	}
-	fmt.Println(" *** Debug info:  from line 112")
+	// fmt.Println(" *** Debug info:  from line 112")
 	// resetGlobal()
 	return unifyMap, nil
 }
@@ -189,10 +189,18 @@ func (unif GeneralUnifier) UnifClousure(t1 *term.Term, t2 *term.Term) error {
 }
 
 func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
-	// fmt.Println(" ************** Inside the Union ******************")
+	fmt.Println(" ************** Inside the Union ******************")
+	// fmt.Println(" *** Debug info: s =",t1 ,"- from line 193")
+	// fmt.Println(" *** Debug info: t =",t2 ,"- from line 194")
 	// TODO: Double check if this one need to call schema
-	s := unif.schema[t1]
-	t := unif.schema[t2]
+	num1 := unif.disjointsets[t1].FindSet(mapToInt[t1])
+	s := mapToTerm[num1]
+
+	num2 := unif.disjointsets[t2].FindSet(mapToInt[t2])
+	t := mapToTerm[num2]
+
+	// s := unif.schema[t1]
+	// t := unif.schema[t2]
 	
 	if _, ok := mapToInt[s]; !ok {
 		// not in the map
@@ -207,9 +215,8 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 		nodeCounter++
 	}
 
-	// fmt.Println(" *** Debug info: s =",s ,"- from line 209")
-	// fmt.Println(" *** Debug info: disjointset[s] =",unif.disjointsets[s].ToString() ," - from line 210")
-
+	// start from here!!! 
+	
 	num := unif.disjointsets[s].UnionSet(mapToInt[s], mapToInt[t])
 	if t == mapToTerm[num] {
 		// swap s & t
@@ -217,25 +224,26 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 		s = t
 		t = temp
 	}
-
+	// fmt.Println(" *** Debug info: s =",s ,"- from line 220")
+	// fmt.Println(" *** Debug info: t =",t ,"- from line 221")
 	// update size, vars and schema for the (new)s
 	unif.size[s] += unif.size[t]
 	unif.vars[s] = append(unif.vars[s], unif.vars[t]...)	// append the vars(t) to vars(s)
 	if unif.schema[s].Typ == term.TermVariable {
 		unif.schema[s] = unif.schema[t]
 	}
-	// fmt.Println(" *** Debug info: t =",t ,"- from line 223")
-	// fmt.Println(" *** Debug info: disjointset[t] =",unif.disjointsets[t].ToString() ," - from line 224")
-	// fmt.Println(" *** Debug info: s =",s ,"- from line 225")
-	// fmt.Println(" *** Debug info: disjointset[s] =",unif.disjointsets[s].ToString() ," - from line 226")
+	fmt.Println(" *** Debug info: t =",t ,"- from line 233")
+	fmt.Println(" *** Debug info: disjointset[t] =",unif.disjointsets[t].ToString() ," - from line 224")
+	fmt.Println(" *** Debug info: s =",s ,"- from line 235")
+	fmt.Println(" *** Debug info: disjointset[s] =",unif.disjointsets[s].ToString() ," - from line 236")
 
 }
 
 func (unif GeneralUnifier) FindSolution(t *term.Term) error {
-	// fmt.Println(" ************** Inside the FindSolution ******************")
+	fmt.Println(" ************** Inside the FindSolution ******************")
 	// fmt.Println(" *** Debug info: unif.disjointSet =", unif.disjointsets[t], "line 195")	
 	// fmt.Println(" *** Debug info: map =", unif.disjointsets)
-	// fmt.Println(" *** Debug info: t =",t ,"- from line 252")
+	fmt.Println(" *** Debug info: original_s =",t ,"- from line 238")
 	num := unif.disjointsets[t].FindSet(mapToInt[t])
 
 	// fmt.Println(" *** Debug info: disjointset =",unif.disjointsets[t].ToString() ,"- from line 262")
@@ -247,23 +255,27 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	s = unif.schema[s]
 	// fmt.Println(" *** Debug info: schema(Find(s)) =",s ,"- from line 271")
 
-
-	// fmt.Println(" *** Debug info: ", s, "line 217")
+	fmt.Println(" *** Debug info: schema_s", s, "line 250")
 	// fmt.Println(" *** Debug info: schema[] =", unif.schema, "line 218")
-	if val, ok := acyclic[s]; ok {
+	fmt.Println(" *** Debug info: acyclic[s] = ",acyclic[s] , "from line 252")
+	if _, ok := acyclic[s]; ok {
 		// TODO: Double check what need to return here??
-		fmt.Println(" *** Debug info: from line 271")
+		fmt.Println(" *** Debug info: from line 255")
+		// if val == false {
+		// 	fmt.Println(" *** Debug info: from line 257")
+		// 	return ErrUnifier
+		// }
+		// return 
+	}
+	fmt.Println(" *** Debug info: visited[s] = ",visited[s] , "from line 262")
+	if val, ok := visited[s]; ok {
 		if val == true {
+			// acyclic[s] = false			// exits a cycle
+			fmt.Println(" *** Debug info: from line 266")
 			return ErrUnifier
 		}
 	}
-
-	if val, ok := visited[s]; ok {
-		if val == true {
-			acyclic[s] = false			// exits a cycle
-		}
-	}
-
+	fmt.Println(" ******************************************************* ")
 	if s.Typ == term.TermCompound {
 		// fmt.Println(" *** Debug info: from line 216")
 		visited[s] = true
