@@ -220,23 +220,31 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 	num := unif.disjointsets[s].UnionSet(mapToInt[s], mapToInt[t])
 	if t == mapToTerm[num] {
 		// swap s & t
-		temp := s
-		s = t
-		t = temp
+		s, t = t, s
 	}
 	// fmt.Println(" *** Debug info: s =",s ,"- from line 220")
 	// fmt.Println(" *** Debug info: t =",t ,"- from line 221")
 	// update size, vars and schema for the (new)s
-	unif.size[s] += unif.size[t]
-	unif.vars[s] = append(unif.vars[s], unif.vars[t]...)	// append the vars(t) to vars(s)
-	if unif.schema[s].Typ == term.TermVariable {
-		unif.schema[s] = unif.schema[t]
+	fmt.Println(unif.size[s], unif.size[t])
+	if unif.size[s] >= unif.size[t] {
+		unif.size[s] += unif.size[t]
+		unif.vars[s] = append(unif.vars[s], unif.vars[t]...)	// append the vars(t) to vars(s)
+		if unif.schema[s].Typ == term.TermVariable {
+			unif.schema[s] = unif.schema[t]
+		}
+	} else {
+		unif.size[t] += unif.size[s]
+		unif.vars[t] = append(unif.vars[t], unif.vars[s]...)	// append the vars(t) to vars(s)
+		if unif.schema[t].Typ == term.TermVariable {
+			unif.schema[t] = unif.schema[s]
+		}
 	}
-	fmt.Println(" *** Debug info: t =",t ,"- from line 233")
-	fmt.Println(" *** Debug info: disjointset[t] =",unif.disjointsets[t].ToString() ," - from line 224")
+	fmt.Println(unif.size[s], unif.size[t])
 	fmt.Println(" *** Debug info: s =",s ,"- from line 235")
 	fmt.Println(" *** Debug info: disjointset[s] =",unif.disjointsets[s].ToString() ," - from line 236")
-
+	fmt.Println(" *** Debug info: t =",t ,"- from line 233")
+	fmt.Println(" *** Debug info: disjointset[t] =",unif.disjointsets[t].ToString() ," - from line 224")
+	
 }
 
 func (unif GeneralUnifier) FindSolution(t *term.Term) error {
