@@ -12,6 +12,7 @@ import (
 // See also https://golang.org/pkg/errors/#New
 // and // https://golang.org/pkg/builtin/#error
 var ErrUnifier = errors.New("unifier error")
+var ErrCheck = errors.New("DEBUGING")
 
 // UnifyResult is the result of unification. For example, for a variable term
 // `s`, `UnifyResult[s]` is the term which `s` is unified with.
@@ -271,22 +272,23 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 	fmt.Println(" *** Debug info: schema_s", s, "line 250")
 	// fmt.Println(" *** Debug info: schema[] =", unif.schema, "line 218")
 	fmt.Println(" *** Debug info: acyclic[s] = ",acyclic[s] , "from line 252")
-	if _, ok := acyclic[s]; ok {
+	
+	if val, ok := acyclic[s]; ok {
 		// TODO: Double check what need to return here??
-		fmt.Println(" *** Debug info: from line 255")
-		// if val == false {
-		// 	fmt.Println(" *** Debug info: from line 257")
-		// return nil
-		// }
-		// return 
-	}
-	fmt.Println(" *** Debug info: visited[s] = ",visited[s] , "from line 262")
-	if val, ok := visited[s]; ok {
-		if val == true {
-			acyclic[s] = false			// exits a cycle
-			fmt.Println(" *** Debug info: from line 266")
+		//fmt.Println(" *** Debug info: from line 277")
+		//fmt.Println(" *** Debug info: val", val, "line 278")
+		if val == false { 
 			return ErrUnifier
 		}
+	}
+
+	fmt.Println(" *** Debug info: visited[s] = ",visited[s] , "from line 262")
+	if val, ok := visited[s]; ok {
+		if val == true  {
+			// acyclic[s] = false	when exits a cycle but having this here doesnt affect any
+			fmt.Println(" *** Debug info: from line 266")
+			return ErrUnifier
+		} 
 	}
 	fmt.Println(" ******************************************************* ")
 	if s.Typ == term.TermCompound {
@@ -297,14 +299,14 @@ func (unif GeneralUnifier) FindSolution(t *term.Term) error {
 			// fmt.Println("********************************")
 			unif.Initializer(s.Args[i], nil)
 			err := unif.FindSolution(s.Args[i])
-			if err != nil {
-				// fmt.Println(" *** Debug info: from line 252")
+			//fmt.Println(" *** Debug info: from line 302 !!!!!!!!!!!", err)
+			if err != nil  {
+				//fmt.Println(" *** Debug info: from line 304 @@@@@@@@@@@@@@@", err)
 				return ErrUnifier
-			}		
+			} 	
 		}
 		visited[s] = false
 	}
-
 	acyclic[s] = true
 
 	
