@@ -59,9 +59,9 @@ func TestUnifyErrorExistsACycle(t *testing.T) {
 	testCases := []struct {
 		input1, input2 string
 	}{
-		{"X", "f(X)"},
-		{"f(X, f(Y))", "f(Y, X)"},
-		{"a(b(c, 2, X), 0, Z)", "X"},
+		{"X", "f(X)"},		
+		{"f(X, f(Y))", "f(Y, X)"},			
+		{"a(b(c, 2, X), 0, Z)", "X"},		
 		{
 			"f(A, B, C, D, E, F)",
 			"f(f(B), C, D, E, F, A)",
@@ -107,7 +107,10 @@ func TestUnifySuccess(t *testing.T) {
 	for idx, test := range []struct {
 		input1, input2 string
 	}{
-		{"f(X, X)", "f(A, B)"},
+		{"f(X)", "f(a)"},		// passed all test
+		{"f(X, Y)", "f(a, b)"},		
+		{"f(X, a)", "f(a, Y)"},		
+		{"f(X, X)", "f(A, B)"},     
 		{"f(X, Y)", "f(g(Y), 2)"},
 		{"f(A, B, C)", "f(X, X, X)"},
 		{"f(h(Y), Y)", "f(X, g(1))"},
@@ -166,11 +169,14 @@ func (result UnifyResult) ToStringMap() UnifyResultAsStr {
 	return stringMap
 }
 
+
 func TestUnifyUnique(t *testing.T) {
 	for idx, test := range []struct {
 		input1, input2   string
 		expectedAsStrMap UnifyResultAsStr
 	}{
+		{"f(X)", "f(Y)", UnifyResultAsStr{"X": "Y"}},
+		{"1", "X", UnifyResultAsStr{"X": "1"}},		// passed all these tests
 		{"X", "1", UnifyResultAsStr{"X": "1"}},
 		{"Y", "f", UnifyResultAsStr{"Y": "f"}},
 		{"X", "f(1)", UnifyResultAsStr{"X": "f(1)"}},
