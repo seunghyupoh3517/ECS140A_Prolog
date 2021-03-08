@@ -4,7 +4,6 @@ import (
 	"errors"
  	"hw4/disjointset"
 	"hw4/term"
-	// "fmt"
 )
 
 // ErrUnifier is the error value returned by the Parser if the string is not a
@@ -175,9 +174,6 @@ func (unif GeneralUnifier) UnifClousure(t1 *term.Term, t2 *term.Term) error {
 }
 
 func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
-	// fmt.Println(" ************** Inside the Union ******************")
-	// fmt.Println(" *** Debug info: origin_s =",t1 ,"- from line 193")
-	// fmt.Println(" *** Debug info: origin_t =",t2 ,"- from line 194")
 	num1 := unif.disjointsets[t1].FindSet(mapToInt[t1])
 	s := mapToTerm[num1]
 
@@ -216,6 +212,8 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 }
 
 func (unif GeneralUnifier) FindSolution(t *term.Term) error {
+	// fmt.Println(" ************** Inside the FindSolution ******************")
+	// fmt.Println(" *** Debug info: original_s =",t ,"- from line 249")
 	num := unif.disjointsets[t].FindSet(mapToInt[t])
 	s := mapToTerm[num]
 	s = unif.schema[s]
