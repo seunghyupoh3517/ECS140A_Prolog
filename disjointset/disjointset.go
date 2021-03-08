@@ -3,9 +3,9 @@ package disjointset
 // DisjointSet is the interface for the disjoint-set (or union-find) data
 // structure.
 // Do not change the definition of this interface.
-//import (
-//	"fmt"
-//)
+// import (
+// 	"fmt"
+// )
 type DisjointSet interface {
 	// UnionSet(s, t) merges (unions) the sets containing s and t,
 	// and returns the representative of the resulting merged set.
@@ -14,7 +14,7 @@ type DisjointSet interface {
 	FindSet(int) int
 
 	// TODO: need to delete
-//	ToString() string
+	// ToString() string
 }
 
 type DisjointSetImpl struct{
@@ -55,11 +55,31 @@ func (ds *DisjointSetImpl) UnionSet(s, t int) int {
 }
 
 func NewDisjointSet() DisjointSet {
-	return &DisjointSetImpl{
-		parent: make(map[int]int),
-		size: make(map[int]int),
-	}
+	return &DisjointSetImpl{make(map[int]int), make(map[int]int)}
 }
+
+func MergeToUnionSets(set1 DisjointSet, set2 DisjointSet) DisjointSet {
+	set_1 := set1.(*DisjointSetImpl)
+	set_2 := set2.(*DisjointSetImpl)
+	for key, val := range set_2.parent {
+		if _, ok := set_1.parent[key]; !ok {
+            set_1.parent[key] = val
+		}
+	}
+	return set_1
+}
+
+func GetParent(setDis DisjointSet) map[int]int {
+	set := setDis.(*DisjointSetImpl)
+	return set.parent
+}
+
+// TODO: Need to delete, only for debug mode
+// func (sets DisjointSetImpl) ToString() string {
+// 	return fmt.Sprint(" ", sets.parent)
+// }
+
+
 
 /*
 
@@ -112,8 +132,4 @@ func (sets Collection) UnionSet(x, y int) int {
 
 }
 
-// TODO: Need to delete, only for debug mode
-func (sets Collection) ToString() string {
-	return fmt.Sprint(" ", sets.parent)
-}
 */
