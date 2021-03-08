@@ -1,0 +1,17 @@
+mode: set
+hw4/disjointset/disjointset.go:21.47,22.32 1 1
+hw4/disjointset/disjointset.go:22.32,26.3 3 1
+hw4/disjointset/disjointset.go:26.8,26.19 1 1
+hw4/disjointset/disjointset.go:26.19,30.3 3 1
+hw4/disjointset/disjointset.go:30.8,32.3 1 1
+hw4/disjointset/disjointset.go:35.51,37.12 2 1
+hw4/disjointset/disjointset.go:40.2,41.19 2 1
+hw4/disjointset/disjointset.go:44.2,46.10 3 1
+hw4/disjointset/disjointset.go:37.12,39.3 1 1
+hw4/disjointset/disjointset.go:41.19,43.3 1 1
+hw4/disjointset/disjointset.go:49.35,51.2 1 1
+hw4/disjointset/disjointset.go:53.71,56.37 3 1
+hw4/disjointset/disjointset.go:61.2,61.14 1 1
+hw4/disjointset/disjointset.go:56.37,57.38 1 1
+hw4/disjointset/disjointset.go:57.38,59.4 1 1
+hw4/disjointset/disjointset.go:64.48,67.2 2 1
