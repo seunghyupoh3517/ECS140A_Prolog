@@ -4,7 +4,6 @@ import (
 	"errors"
  	"hw4/disjointset"
 	"hw4/term"
-	// "fmt"
 )
 
 // ErrUnifier is the error value returned by the Parser if the string is not a
@@ -175,27 +174,11 @@ func (unif GeneralUnifier) UnifClousure(t1 *term.Term, t2 *term.Term) error {
 }
 
 func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
-	// fmt.Println(" ************** Inside the Union ******************")
-	// fmt.Println(" *** Debug info: origin_s =",t1 ,"- from line 193")
-	// fmt.Println(" *** Debug info: origin_t =",t2 ,"- from line 194")
 	num1 := unif.disjointsets[t1].FindSet(mapToInt[t1])
 	s := mapToTerm[num1]
 
 	num2 := unif.disjointsets[t2].FindSet(mapToInt[t2])
 	t := mapToTerm[num2]
-	
-	if _, ok := mapToInt[s]; !ok {
-		// not in the map
-		mapToInt[s] = nodeCounter
-		mapToTerm[nodeCounter] = s
-		nodeCounter++
-	}
-
-	if _, ok := mapToInt[t]; !ok {
-		mapToInt[t] = nodeCounter
-		mapToTerm[nodeCounter] = t
-		nodeCounter++
-	}
 
 	if unif.size[s] >= unif.size[t] {
 		unif.size[s] += unif.size[t]
@@ -226,17 +209,6 @@ func (unif GeneralUnifier) Union(t1 *term.Term, t2 *term.Term) {
 			unif.disjointsets[si] = unif.disjointsets[t]				// update disjointes for ti
 		}
 	}
-
-	// fmt.Println(" *** Debug info: s =",s ,"- from line 232")
-	// fmt.Println(" *** Debug info: t =",t ,"- from line 233")
-	// fmt.Println(" *** Debug info: disjointset[s] =",unif.disjointsets[s].ToString() ,"- from line 234")
-	// fmt.Println(" *** Debug info: disjointset[t] =",unif.disjointsets[t].ToString() ,"- from line 235")
-	// fmt.Println(" *** Debug info: schema_s = ", unif.schema[s], " - from line 236")
-	// fmt.Println(" *** Debug info: schema_t = ", unif.schema[t], " - from line 237")
-	// fmt.Println(" *** Debug info: vars(s) = ", unif.vars[s], " - from line 238")
-	// fmt.Println(" *** Debug info: vars(t) = ", unif.vars[t], " - from line 239")
-
-	// fmt.Println(" ******************************************************* ")
 }
 
 func (unif GeneralUnifier) FindSolution(t *term.Term) error {
