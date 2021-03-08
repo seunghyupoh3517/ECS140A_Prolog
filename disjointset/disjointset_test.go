@@ -5,6 +5,26 @@ import (
 	"testing"
 )
 
+// func fullfillTest(t *testing.T){
+
+// 	func() {
+// 		// s1 := NewDisjointSet()
+// 		// s1 := NewDisjointSet()
+// //         s2 := NewDisjointSet()
+// //         s1.UnionSet(0,0)
+// //         s1.UnionSet(1,0)
+// //         s1.UnionSet(2,0)
+
+// //         s2.UnionSet(2,2)
+// //         s2.UnionSet(3,2)
+// // 		mm := MergeToUnionSets(s1, s2)
+// // 		gp := GetParent(s1)
+// // 		if mm != nil && gp != nil{
+// // 			return
+// // 		}
+// 	}()
+// }
+
 func TestDisjointSetSimple(t *testing.T) {
 	func() {
 		defer func() {
@@ -53,6 +73,20 @@ func TestDisjointSetOddEven(t *testing.T) {
 			if sameMod != sameSet {
 				t.Errorf("Expected %d and %d to be in the same set", i, j)
 			}
+		}
+
+		s1 := NewDisjointSet()
+		s2 := NewDisjointSet()
+		s1.UnionSet(0,0)
+		s1.UnionSet(1,0)
+		s1.UnionSet(2,0)
+
+		s2.UnionSet(2,2)
+		s2.UnionSet(3,2)
+		mm := MergeToUnionSets(s1, s2)
+		gp := GetParent(s1)
+		if mm != nil && gp != nil{
+			return
 		}
 	}()
 }
